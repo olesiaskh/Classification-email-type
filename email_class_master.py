@@ -3,16 +3,12 @@ import numpy as np
 
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score, classification_report, f1_score
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.feature_selection import SelectKBest, chi2
-from sklearn.decomposition import PCA
+from sklearn.model_selection import cross_val_score
 from sklearn.impute import SimpleImputer
 
 
 from data_clean import tld_clean, mailtype_clean
 from new_features import hour_day_month_utc, orgtype, org_encode
-from resampling import resampling
 from encoder import encode_train_test
 
 
@@ -40,13 +36,9 @@ data_train=org_encode(data_train, org_0, org_1, org_2, org_3, org_4, org_5, org_
 data_test=org_encode(data_test, org_0, org_1, org_2, org_3, org_4, org_5, org_6, org_7)
 print('Features created')
 
-#resample the training data
-data_sampled = resampling(data_train, 5)
-data_sampled = data_sampled.reset_index(drop=True)
-print('Data resampled')
 
 #choose numerical features to include
-train_x = data_sampled[['chars_in_subject', 'org_update','org_personal','org_promo','org_prof','org_com','org_travel','org_spam','org_social']]
+train_x = data_train[['chars_in_subject', 'org_update','org_personal','org_promo','org_prof','org_com','org_travel','org_spam','org_social']]
 test_x = data_test[['chars_in_subject', 'org_update','org_personal','org_promo','org_prof','org_com','org_travel','org_spam','org_social']]
 print('Numerical features selected')
 
@@ -57,7 +49,7 @@ test_x = pd.DataFrame(imp.transform(test_x),columns=['chars_in_subject', 'org_up
 print('Nulls replaced on numerical')
 
 #choose categorical features to include
-train_x_cat = data_sampled[['org','mail_type']]
+train_x_cat = data_train[['org','mail_type']]
 train_x_cat = train_x_cat.fillna(value='None')
 test_x_cat = data_test[['org','mail_type']]
 test_x_cat = test_x_cat.fillna(value='None')
@@ -72,13 +64,9 @@ train_x = train_x.join(train_x_featurized)
 test_x = test_x.join(test_x_featurized)
 
 #get labels
-train_y = data_sampled['label'].values
+train_y = data_train['label'].values
 print('Train and test datasets created')
  
-#perform feature selection
-#train_x_new = SelectKBest(chi2, k=1000).fit_transform(train_x, train_y)
-#print('Feature selection completed')
-
 #fit your model and perform cross-validation
 clf = DecisionTreeClassifier(max_depth=11)
 clf.fit(train_x, train_y)
@@ -88,8 +76,7 @@ print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
 #make predictions from the given model
 pred_y = clf.predict(test_x)
+
 # Save results to submission file
 pred_df = pd.DataFrame(pred_y, columns=['label'])
 pred_df.to_csv("email_class_result.csv", index=True, index_label='Id')
-
-
