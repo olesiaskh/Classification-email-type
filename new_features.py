@@ -86,6 +86,7 @@ def weekend_month(data):
 def orgtype(data):
     """
     Define which organizations fall within each organization type
+    The assignment of type is based on which  
     """
     label_0 = set(data[data['label']==0]['org'].unique())
     label_1 = set(data[data['label']==1]['org'].unique())
