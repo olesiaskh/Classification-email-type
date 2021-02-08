@@ -1,6 +1,15 @@
 def hour_day_month_utc(data):
-    """
-    Create new categorical features based on the date ('date' column) - hour, day, month and UTC timezone
+    """Create hour, day, month and UTC features based on date.
+    
+    Parameters
+    ----------
+    data: dataframe
+        Dataframe that includes 'date' column.
+        
+    Returns
+    -------
+    dataframe
+        Dataframe with 4 new columns: 'Hour', 'Day', 'Month', 'UTC'.
     """
     hours=[]
     day=[]
@@ -57,8 +66,17 @@ def hour_day_month_utc(data):
 
 
 def weekend_month(data):
-    """
-    Create new features based on the date ('date' column) - month and weekend flag
+    """Create weekend, month features based on date.
+    
+    Parameters
+    ----------
+    data: dataframe
+        Dataframe that includes 'date' column.
+        
+    Returns
+    -------
+    dataframe
+        Dataframe with 2 new columns: 'weekend', 'month'.
     """
     weekend = ['Sat,','Sun,']
     month = []
@@ -84,11 +102,38 @@ def weekend_month(data):
 
 
 def orgtype(data):
-    """
-    Define which organizations fall within each organization type
-    The type is based on target variable that appears with a specific organization (like social, professional, promotional)
-    If an organization has different labels in different rows, the final assignment is given to
-    type other than 'update' and 'personal'
+    """Define sets of organization types.
+    
+    Parameters
+    ----------
+    data: dataframe
+        Dataframe that includes 'label' and 'org' columns.
+        
+    Returns
+    -------
+    org_update: set
+        The organizations the belong to set 'update'.
+    org_personal: set
+        The organizations the belong to set 'personal'.
+    org_promo: set
+        The organizations the belong to set 'promotions'.
+    org_prof: set
+        The organizations the belong to set 'professional'.
+    org_com: set
+        The organizations the belong to set 'commercial'.
+    org_travel: set
+        The organizations the belong to set 'travel'.
+    org_spam: set
+        The organizations the belong to set 'spam'. 
+    org_social: set
+        The organizations the belong to set 'social'.
+        
+    Notes
+    -------
+    The type is based on target value that appears with a specific organization.
+    If an organization is associated with multiple target values, the organization is
+    assigned to the type that is least common in the dataset overall 
+    (neither 'update', nor 'personal').
     """
     label_0 = set(data[data['label']==0]['org'].unique())
     label_1 = set(data[data['label']==1]['org'].unique())
@@ -99,55 +144,90 @@ def orgtype(data):
     label_6 = set(data[data['label']==6]['org'].unique())
     label_7 = set(data[data['label']==7]['org'].unique())
     
-    org_0 = label_0 - set.intersection(label_0,label_2) -  set.intersection(label_0,label_3) -  set.intersection(label_0,label_4)- set.intersection(label_0,label_5)- set.intersection(label_0,label_6)- set.intersection(label_0,label_7)
-    org_1 = label_1 - set.intersection(label_0, label_1) - set.intersection(label_1,label_2) -  set.intersection(label_1,label_3) -  set.intersection(label_1,label_4)- set.intersection(label_1,label_5)- set.intersection(label_1,label_6)- set.intersection(label_1,label_7)
-    org_2 = label_2 - set.intersection(label_2,label_4)
-    org_3 = label_3 
-    org_4 = label_4 
-    org_5 = label_5 - set.intersection(label_5, label_3)
-    org_6 = label_6 - set.intersection(label_6, label_4)
-    org_7 = label_7 
+    org_update = label_0 - set.intersection(label_0,label_2) -  set.intersection(label_0,label_3) -  set.intersection(label_0,label_4)- set.intersection(label_0,label_5)- set.intersection(label_0,label_6)- set.intersection(label_0,label_7)
+    org_personal = label_1 - set.intersection(label_0, label_1) - set.intersection(label_1,label_2) -  set.intersection(label_1,label_3) -  set.intersection(label_1,label_4)- set.intersection(label_1,label_5)- set.intersection(label_1,label_6)- set.intersection(label_1,label_7)
+    org_promo = label_2 - set.intersection(label_2,label_4)
+    org_prof = label_3 
+    org_com = label_4 
+    org_travel = label_5 - set.intersection(label_5, label_3)
+    org_spam = label_6 - set.intersection(label_6, label_4)
+    org_social = label_7 
 
-    return org_0, org_1, org_2, org_3, org_4, org_5, org_6, org_7
+    return org_update, org_personal, org_promo, org_prof, org_com, org_travel, org_spam, org_social
     
-def org_encode(data, org_0, org_1, org_2, org_3, org_4, org_5, org_6, org_7):
-    """
-    For each row, encode what type of organization the email came from
+def org_encode(data, org_update, org_personal, org_promo, org_prof, org_com, org_travel, org_spam, org_social):
+    """Assign organization type to each email.
+    
+    Parameters
+    ----------
+    data: dataframe
+        Dataframe that includes 'label' and 'org' columns.
+    org_update: set
+        The organizations the belong to set 'update'.
+    org_personal: set
+        The organizations the belong to set 'personal'.
+    org_promo: set
+        The organizations the belong to set 'promotions'.
+    org_prof: set
+        The organizations the belong to set 'professional'.
+    org_com: set
+        The organizations the belong to set 'commercial'.
+    org_travel: set
+        The organizations the belong to set 'travel'.
+    org_spam: set
+        The organizations the belong to set 'spam'. 
+    org_social: set
+        The organizations the belong to set 'social'.  
+        
+    Returns
+    -------
+    dataframe
+        Dataframe with 8 new columns: 'org_update', 'org_personal', 
+        'org_promo', 'org_prof', 'org_com', 'org_travel', 'org_spam', 
+        'org_social' (all boolean).
     """
     for index, row in data.iterrows():
         if data.loc[index,'org'] == data.loc[index,'org']:
-            if data.loc[index,'org'] in org_0:
+            if data.loc[index,'org'] in org_update:
                 data.loc[index,'org_update']=1
             else:
                 data.loc[index,'org_update']=0
-            if data.loc[index,'org'] in org_1:
+                
+            if data.loc[index,'org'] in org_personal:
                 data.loc[index,'org_personal']=1
             else:
                 data.loc[index,'org_personal']=0
-            if data.loc[index,'org'] in org_2:
+                
+            if data.loc[index,'org'] in org_promo:
                 data.loc[index,'org_promo']=1
             else:
                 data.loc[index,'org_promo']=0
-            if data.loc[index,'org'] in org_3:
+                
+            if data.loc[index,'org'] in org_prof:
                 data.loc[index,'org_prof']=1
             else:
-                data.loc[index,'org_prof']=0      
-            if data.loc[index,'org'] in org_4:
+                data.loc[index,'org_prof']=0    
+                
+            if data.loc[index,'org'] in org_com:
                 data.loc[index,'org_com']=1
             else:
-                data.loc[index,'org_com']=0      
-            if data.loc[index,'org'] in org_5:
+                data.loc[index,'org_com']=0   
+                
+            if data.loc[index,'org'] in org_travel:
                 data.loc[index,'org_travel']=1
             else:
                 data.loc[index,'org_travel']=0
-            if data.loc[index,'org'] in org_6:
+                
+            if data.loc[index,'org'] in org_spam:
                 data.loc[index,'org_spam']=1
             else:
                 data.loc[index,'org_spam']=0
-            if data.loc[index,'org'] in org_7:
+                
+            if data.loc[index,'org'] in org_social:
                 data.loc[index,'org_social']=1
             else:
                 data.loc[index,'org_social']=0
+                
         else:
             data.loc[index,'org_update']=0
             data.loc[index,'org_personal']=0
