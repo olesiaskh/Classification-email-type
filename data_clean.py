@@ -1,8 +1,20 @@
 def tld_clean(data):
-    """
-    Separate organization name and domain name if they are still together in the 'tld' column
-    Replace the current organization name with the extracted organization name
-    Double domain names (such as 'gov.fr' are kept as one domain name)
+    """Separate organization and domain if they are still one value in 'tld'.
+    
+    Parameters
+    ----------
+    data: dataframe
+        Dataframe that includes 'tld' and 'org' columns.
+        
+    Returns
+    -------
+    data: dataframe
+        Dataframe with cleaned values in 'tld'.
+        
+    Notes
+    -------
+    The function replaces current organization name with name extracted from 'tld'.
+    Double domain names (such as 'gov.fr') are kept as one value in 'tld'.
     """
     exceptions = ['org','co','gov','ac','net'] #elements of double domain names
     for index,row in data.iterrows():
@@ -32,8 +44,17 @@ def tld_clean(data):
 
 
 def mailtype_clean(data):
-    """
-    Fix differences in spelling of the same values
+    """Fix differences in spelling of the same values.
+    
+    Parameters
+    ----------
+    data: dataframe
+        Dataframe that includes the 'mail_type' column with values to fix.
+        
+    Returns
+    -------
+    data: dataframe
+        Dataframe with spelling fixed in 'mail_type' column.
     """
     data['mail_type'] = data['mail_type'].replace(['Multipart/Alternative'],'multipart/alternative')
     data['mail_type'] = data['mail_type'].replace(['Multipart/Mixed'],'multipart/mixed')
