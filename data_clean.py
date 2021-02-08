@@ -8,7 +8,7 @@ def tld_clean(data):
         
     Returns
     -------
-    data: dataframe
+    dataframe
         Dataframe with cleaned values in 'tld'.
         
     Notes
@@ -53,7 +53,7 @@ def mailtype_clean(data):
         
     Returns
     -------
-    data: dataframe
+    dataframe
         Dataframe with spelling fixed in 'mail_type' column.
     """
     data['mail_type'] = data['mail_type'].replace(['Multipart/Alternative'],'multipart/alternative')
