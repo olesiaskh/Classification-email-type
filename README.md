@@ -1,7 +1,7 @@
 # Email Classification
 
 ## What is it about?
-This projects creates a multi-class classification of emails based on their metadata (such as date received, sender, number of characters in title and body). 
+This projects creates a multi-class classification of emails based on their metadata. 
 
 ## What data was used?
 Two separate data files were used - one for training, one for testing. Each included the following information about emails:
@@ -20,4 +20,7 @@ Two separate data files were used - one for training, one for testing. Each incl
 * __label__ (only in train data) - label of this email; eight classes are 'Updates', 'Personal', ‘Promotions’, 'Forums', 'Purchases', 'Travel', 'Spam', and ‘Social’ (class ids start from 0 to 7)
 
 ## What is included in the code?
-The code consists of two parts. The first one (Jupyter notebook) is exploratory and aims to describe the data used (including data quality, attributes types and values). The second (python files) includes the model and additional data manipulation functions in separate files (cleaning, feature engineering, encoding, etc.). The code is designed to be flexible - steps can be included or omitted as needed in the master code.
+The code consists of two parts. 
+1. __Jupyter notebook__ - data exploratorion, aims to describe the data used (including data quality, attributes types and values).
+2.__Python files__ - the model and support functions in separate files.
+The code is designed to be flexible - steps can be included or omitted as needed in the master code.
