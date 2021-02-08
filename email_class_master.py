@@ -56,7 +56,7 @@ test_x_cat = test_x_cat.fillna(value='None')
 print('Categorical features selected')
 
 #encode categorical variables 
-test_x_featurized, train_x_featurized = encode_train_test(test_x_cat, train_x_cat)
+train_x_featurized, test_x_featurized = encode_train_test(train_x_cat, test_x_cat)
 print('Categorical features encoded')
 
 #merge numerical and categorical data
