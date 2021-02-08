@@ -1,6 +1,6 @@
 def hour_day_month_utc(data):
     """
-    Create new categorical features based on the date - hour, day, month and UTC timezone
+    Create new categorical features based on the date ('date' column) - hour, day, month and UTC timezone
     """
     hours=[]
     day=[]
@@ -58,7 +58,7 @@ def hour_day_month_utc(data):
 
 def weekend_month(data):
     """
-    Create new features based on the date - month and weekend flag
+    Create new features based on the date ('date' column) - month and weekend flag
     """
     weekend = ['Sat,','Sun,']
     month = []
@@ -86,7 +86,8 @@ def weekend_month(data):
 def orgtype(data):
     """
     Define which organizations fall within each organization type
-    The assignment of type is based on which  
+    The type is based on target variable that appears with a specific organization (like social, professional, promotional)
+    If an organization has different labels in different rows, the final assignment is 
     """
     label_0 = set(data[data['label']==0]['org'].unique())
     label_1 = set(data[data['label']==1]['org'].unique())
@@ -108,8 +109,10 @@ def orgtype(data):
 
     return org_0, org_1, org_2, org_3, org_4, org_5, org_6, org_7
     
-def org_encode(data,org_0, org_1, org_2, org_3, org_4, org_5, org_6, org_7):
-    
+def org_encode(data, org_0, org_1, org_2, org_3, org_4, org_5, org_6, org_7):
+    """
+    For each row, encode what type of organization the email came from
+    """
     for index, row in data.iterrows():
         if data.loc[index,'org'] == data.loc[index,'org']:
             if data.loc[index,'org'] in org_0:
