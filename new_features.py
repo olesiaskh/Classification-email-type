@@ -87,7 +87,8 @@ def orgtype(data):
     """
     Define which organizations fall within each organization type
     The type is based on target variable that appears with a specific organization (like social, professional, promotional)
-    If an organization has different labels in different rows, the final assignment is 
+    If an organization has different labels in different rows, the final assignment is given to
+    type other than 'update' and 'personal'
     """
     label_0 = set(data[data['label']==0]['org'].unique())
     label_1 = set(data[data['label']==1]['org'].unique())
