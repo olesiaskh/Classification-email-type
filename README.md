@@ -22,5 +22,5 @@ Two separate data files were used - one for training, one for testing. Each incl
 ## What is included in the code?
 The code consists of two parts. 
 1. __Jupyter notebook__ - data exploratorion, aims to describe the data used (including data quality, attributes types and values).
-2.__Python files__ - the model and support functions in separate files.
+2. __Python files__ - the model and support functions in separate files.
 The code is designed to be flexible - steps can be included or omitted as needed in the master code.
