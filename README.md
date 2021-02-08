@@ -1,7 +1,7 @@
 # Email Classification
 
 ## What is it about?
-This projects creates a multi-class classification of emails based on their metadata. 
+This project creates a multi-class classification of emails based on their metadata. It helps users to quickly understand what type of email they received, making it easier to decide if they want to read it and when.
 
 ## What data was used?
 Two separate data files were used - one for training, one for testing. Each included the following information about emails:
