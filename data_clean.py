@@ -33,7 +33,7 @@ def tld_clean(data):
                     data.loc[index, "tld"] = splitted[-1]
                     data.loc[index, "org"] = ".".join(splitted[:-2])
                 else:
-                    data.loc[index, "tld"] = ".".join(splitted[-2:-1])
+                    data.loc[index, "tld"] = splitted[-2]
                     data.loc[index, "org"] = ".".join(splitted[:-3])
 
         else:
